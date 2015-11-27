@@ -54,12 +54,15 @@ for row in Features:
 	vec = []
 	for i in range(0, 5):
 		vec = vec + vectorize(int(mins[i]), int(maxs[i]), int(row[i]))
-	vec.append((row[5]-mins[5]) / -maxs[5])
-	vec.append((row[6]-mins[6]) / maxs[6])
+	vec.append(((row[5] - mins[5]) / (maxs[5] - mins[5])))
+	vec.append(((row[6] - mins[6]) / (maxs[6] - mins[6])))
 	oneHot.append(vec)
 
 # Save processed data mat format
 sio.savemat('data/space_time_label_binary.mat', {'Features': oneHot, 'Labels': Labels})
+
+# save nomralization parameters
+sio.savemat('data/normalization_params', {'mins': mins, 'maxs': maxs})
 
 # Save label map into JSON
 mapfile = open('data/label_map.json', 'w+')
