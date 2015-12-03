@@ -1,3 +1,4 @@
+import os
 import numpy as np
 import scipy.io as sio
 import sys
@@ -87,37 +88,53 @@ color_table["SEX OFFENSES NON FORCIBLE"] = 'FF66FF'
 color_table["TREA"] = 'FF99FF'
 color_table["PORNOGRAPHY/OBSCENE MAT"] = '999999'
 
-if (len(sys.argv) <= 2):
-        print "Usage: python", sys.argv[0], "inputfile.csv", "year"
-        sys.exit()
+#if (len(sys.argv) <= 3):
+#        print "Usage: python", sys.argv[0], "inputfile.csv", "crime_label", "year"
+#        sys.exit()
 
-fname = sys.argv[1]
-y = int(sys.argv[2])
-csvfile = open(fname)
-csv = csv.reader(csvfile, delimiter=',')
+def main(fname,crime_label,y):
 
-gmap = gmplot.GoogleMapPlotter.from_geocode("San Francisco")
+        #fname = sys.argv[1]
+        #y = int(sys.argv[3])
+        #crime_label = sys.argv[2]
+        csvfile = open(fname)
+        file_csv = csv.reader(csvfile, delimiter=',')
 
-xlist = [[] for i in range(0, len(category_set))]
-ylist = [[] for i in range(0, len(category_set))]
-for row in csv:
-        timestamp = row[0]
-        date = datetime.datetime.fromtimestamp(float(timestamp))
-        year = date.strftime('%Y')        
-        day = row[1]
-        district = row[2]
-        address = row[3]
-        lon = float(row[4])
-        lat = float(row[5])
-        category = row[6]
-        if(int(year) == y):
-        	index = category_set.index(category)
-        	#print(index)
-        	xlist[index].append(lat)
-        	ylist[index].append(lon)      
-for i in range(0, len(category_set)):
-	gmap.scatter(xlist[i], ylist[i], color=color_table[category_set[i]], size=40, marker=False)
-filename = "map_" + `y` + ".html"
-gmap.draw(filename)
+        gmap = gmplot.GoogleMapPlotter.from_geocode("San Francisco")
 
-csvfile.close()
+        #xlist = [[] for i in range(0, len(category_set))]
+        #ylist = [[] for i in range(0, len(category_set))]
+        xlist = []
+        ylist = []
+
+        for row in file_csv:
+                timestamp = row[0]
+                date = datetime.datetime.fromtimestamp(float(timestamp))
+                year = date.strftime('%Y')        
+                day = row[1]
+                district = row[2]
+                address = row[3]
+                lon = float(row[4])
+                lat = float(row[5])
+                category = row[6]
+                if(int(year) == y and category == crime_label):
+                	#index = category_set.index(category)
+                	#print(index)
+                	#xlist[index].append(lat)
+                	#ylist[index].append(lon)
+                        xlist.append(lat)
+                        ylist.append(lon)      
+        #for i in range(0, len(category_set)):
+        #	gmap.scatter(xlist[i], ylist[i], color=color_table[category_set[i]], size=40, marker=False)
+        gmap.scatter(xlist, ylist, color=color_table[crime_label], size=40, marker=False)
+        crime_convert = crime_label.replace(" ", "_").replace("/", "_")
+        if not os.path.exists("maps/" + crime_convert):
+                os.makedirs("maps/" + crime_convert)
+        filename = "maps/" + crime_convert + "/" + crime_convert + `y` + ".html"
+        gmap.draw(filename)
+
+        csvfile.close()
+        return 0;
+
+#if __name__=='__main__':
+#        sys.exit(main(sys.argv[1], sys.argv[2], int(sys.argv[3])))
