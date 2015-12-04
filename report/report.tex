@@ -69,8 +69,41 @@ To address this issue, we want to filter out districts and streets that are not 
 	S^* = argmax_{S \subset W} \sum_i^N log(p(x_i|S)) p(S)
 \end{align*}
 This is thus very similar to decision tree learning, except that we want to pick the top 10 features, rathern than picking one at each depth. We used an ensemble model, the Extremely Randomized Trees[2] to solve the problem. It basically add randomness in the splitting process, and combines all the results to give a feature ranking.
-
 \end{p3}
+
+\begin{p4}{}
+\item{\textbf{Feature Selection Results}\\}
+Running the feature selection process for districts and streets, below are the top 10 names we found.
+\begin{center}
+	\begin{tabular}{||c c c||} 
+		\hline
+	   	Name & Weight & Type\\
+		\hline
+		TENDERLOIN & 0.248802719147 & District\\
+		\hline
+		BAYVIEW  & 0.12442886283 & District\\
+		\hline
+		CENTRAL  & 0.164109496071 & District\\
+		\hline
+		SOUTHERN & 0.120383230634 & District\\
+		\hline
+		NORTHERN & 0.108657207712 & District\\
+		\hline
+		INGLESIDE & 0.0851453969923 & District\\
+		\hline
+		TARAVAL & 0.0434198382797 & District\\
+		\hline
+		MISSION AVE & 0.0410287072239 & Street\\
+		\hline
+		RICHMOND & 0.0328377255613 & District\\
+		\hline
+		PARK & 0.0311868155498 & District\\
+		\hline
+	\end{tabular}
+	{\\fig.1 best names}
+\end{center}
+From the table we can see that in general districts are more informative than streets. And since we are using dicision trees, this should not be a result of districts having higher frequencies to appear in our dataset than streets. We further normalized our data and ran the same algorithm, and obtained the same results. But notice that Mission Ave is more informative than some districts, which is an interesting observation.
+\end{p4}
 
 % --------------------------------------------------------------
 %     You don't have to mess with anything below this line.
