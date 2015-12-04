@@ -92,7 +92,7 @@ color_table["PORNOGRAPHY/OBSCENE MAT"] = '999999'
 #        print "Usage: python", sys.argv[0], "inputfile.csv", "crime_label", "year"
 #        sys.exit()
 
-def main(fname,crime_label,y):
+def main(fname,crime_label,y, draw_heatmap=False):
 
         #fname = sys.argv[1]
         #y = int(sys.argv[3])
@@ -126,7 +126,10 @@ def main(fname,crime_label,y):
                         ylist.append(lon)      
         #for i in range(0, len(category_set)):
         #	gmap.scatter(xlist[i], ylist[i], color=color_table[category_set[i]], size=40, marker=False)
-        gmap.scatter(xlist, ylist, color=color_table[crime_label], size=40, marker=False)
+        if draw_heatmap:
+                gmap.heatmap(xlist, ylist, threshold=3, radius=20)
+        else:
+                gmap.scatter(xlist, ylist, color=color_table[crime_label], size=40, marker=False)
         crime_convert = crime_label.replace(" ", "_").replace("/", "_")
         if not os.path.exists("maps/" + crime_convert):
                 os.makedirs("maps/" + crime_convert)
