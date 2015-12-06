@@ -17,7 +17,7 @@
 \newenvironment{p1}[2][Motivation]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2}]}{\end{trivlist}}
 
-\newenvironment{p2}[2][Data]{\begin{trivlist}
+\newenvironment{p2}[2][Data and Software Tools]{\begin{trivlist}
 \item[\hskip \labelsep {\bfseries #1}\hskip \labelsep {\bfseries #2}]}{\end{trivlist}}
 
 \newenvironment{p3}[2][Methods]{\begin{trivlist}
@@ -44,31 +44,34 @@
 %                         Start here
 % --------------------------------------------------------------
  
-\title{San Fancisco Crime Study}
+\title{San Francisco Crime Study}
 \author{Yunzhong He (204010749) Zhinan Guan (004118232)}
 \maketitle
 
 \begin{abs}{}
 \item{}
-For this project we performed data minings and visualizations on San Francisco's crime data from 2003 to 2015, in order to find patterns in the space-time distributions of different types of crimes. We fisrt performed feature selection on district and street names using random forest, and obtained the most meanful names in terms of separating different kinds of crimes. Then we used Linear Discrimiant Analysis (LDA), with respect to time, GPS coordinate and the features selected in the previous step, to learn the likelihood function of different crimes. Eventually, using our learned results we were able to generate heat maps for differnt crimes throughout San Fransiciso.
+For this project we performed data minings and visualizations on San Francisco's crime data from 2003 to 2015, in order to find patterns in the space-time distributions of different types of crimes. We first performed feature selection on district and street names using random forest, and obtained the most meaningful names in terms of separating different kinds of crimes. Then we used Linear Discriminate Analysis (LDA), with respect to time, GPS coordinate and the features selected in the previous step, to learn the likelihood function of different crimes. Eventually, using our learned results we were able to generate heat maps for different crimes throughout San Francisco.
 \end{abs}
 
 \begin{p1}{}
 \item{}
+San Francisco was know for its numerous crimes in the past. Nowadays, the growing housing shortage,  inequality of wealth lead to many crimes in the city. Given time and location of all the crimes in nearly 12 years in San Francisco, we want to use machine learning to study the data, and to find the key factors in terms of time and location that causes different crimes. We got the idea of our project from an ongoing competition on Kaggle.com. 
 \end{p1}
 
 \begin{p2}{}
 \item{}
+We obtained all the data of this project from Kaggle, including a train dataset and a test dataset in cvs format. Original features of each crime in the datasets are: Timestamp, Day of Week, District, Address, Latitude, Longitude. To make the address useful, we extracted only the street name from the address rather than using the exact address. We used all these features to learn the data.\\\\
+The project is implemented in python, with several third party packages. We used "numpy" package while preprocessing the data, "scikit-learn" package for the data mining algorithms, and gmplot to visualize the results on San Francisco map. 
 \end{p2}
 
 \begin{p3}{}
 \item{\textbf{Feature Selection with Random Forrest\\}}
-From the dataset we are given the district and street names of all the crime occurances. Using bag-of-word model[1] we can encode them into binary vectors as part of our feature. But given the amount of dataset, the computation is going to take very long time given the dimension of our feature space. More importantly, the resultant vector of bag-of-words encoding is very sparse -- for a vector of 500+ entries represting bag-of-words encoding of one data point, at most two entries will be 1, because there is only one district and one street name for each crime incident.\\\\
-To address this issue, we want to filter out districts and streets that are not very informative in terms of crime classification. Limiting our bag-of-words model to contain only 10 words, we want to find a subset S, of the set of all districts and streets W, that maximizes the information gain. We we have
+From the dataset we are given the district and street names of all the crime occurrences. Using bag-of-word model[1] we can encode them into binary vectors as part of our feature. But given the amount of dataset, the computation is going to take very long time given the dimension of our feature space. More importantly, the resultant vector of bag-of-words encoding is very sparse -- for a vector of 500+ entries representing bag-of-words encoding of one data point, at most two entries will be 1, because there is only one district and one street name for each crime incident.\\\\
+To address this issue, we want to filter out districts and streets that are not very informative in terms of crime classification. Limiting our bag-of-words model to contain only 10 words, we want to find a subset S, of the set of all districts and streets W, that maximizes the information gain. We have
 \begin{align*}
 	S^* = argmax_{S \subset W} \sum_i^N log(p(x_i|S)) p(S)
 \end{align*}
-This is thus very similar to decision tree learning, except that we want to pick the top 10 features, rathern than picking one at each depth. We used an ensemble model, the Extremely Randomized Trees[2] to solve the problem. It basically add randomness in the splitting process, and combines all the results to give a feature ranking.
+This is thus very similar to decision tree learning, except that we want to pick the top 10 features, rather than picking one at each depth. We used an ensemble model, the Extremely Randomized Trees[2] to solve the problem. It basically add randomness in the splitting process, and combines all the results to give a feature ranking.
 \end{p3}
 
 \begin{p4}{}
@@ -102,7 +105,7 @@ Running the feature selection process for districts and streets, below are the t
 	\end{tabular}
 	{\\fig.1 best names}
 \end{center}
-From the table we can see that in general districts are more informative than streets. And since we are using dicision trees, this should not be a result of districts having higher frequencies to appear in our dataset than streets. We further normalized our data and ran the same algorithm, and obtained the same results. But notice that Mission Ave is more informative than some districts, which is an interesting observation.
+From the table we can see that in general districts are more informative than streets. And since we are using decision trees, this should not be a result of districts having higher frequencies to appear in our dataset than streets. We further normalized our data and ran the same algorithm, and obtained the same results. But notice that Mission Ave is more informative than some districts, which is an interesting observation.
 \end{p4}
 
 % --------------------------------------------------------------
