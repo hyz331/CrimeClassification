@@ -6,9 +6,10 @@ import sys
 from sklearn import svm
 from sklearn.metrics import log_loss
 from sklearn import linear_model
+from sklearn import cross_validation
 
 # Load data
-data = sio.loadmat('../data/space_time_label_binary.mat')
+data = sio.loadmat('../data/train_encoded.mat')
 testData = sio.loadmat('../data/test_encoded.mat')
 normParams = sio.loadmat('../data/normalization_params.mat')
 labelMap = json.load(open('../data/label_map.json'))
@@ -41,5 +42,6 @@ for k in keys:
 	header = header + ',' + revMap[k]
 print >> outfile, header
 
+pred = numpy.around(pred, decimals=3)
 for i in range(0, len(pred)):
 	print >> outfile, str(Ids[i]) + ',' + ','.join(map(lambda p: str(p), pred[i]))
