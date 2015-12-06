@@ -42,6 +42,6 @@ for k in keys:
 	header = header + ',' + revMap[k]
 print >> outfile, header
 
-pred = numpy.around(pred, decimals=3)
+pred = np.around(pred, decimals=3)
 for i in range(0, len(pred)):
 	print >> outfile, str(Ids[i]) + ',' + ','.join(map(lambda p: str(p), pred[i]))
