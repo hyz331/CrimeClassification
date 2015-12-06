@@ -8,6 +8,8 @@ import datetime
 
 def vectorize(minVal, maxVal, val):
 	vec = [0 for i in range(0, maxVal-minVal+1)]
+	if (val == - 1):
+		return vec
 	vec[val-minVal] = 1
 	return vec
 
@@ -15,6 +17,7 @@ if (len(sys.argv) <= 1):
 	print "Usage: python", sys.argv[0], "inputfile.csv"
 	sys.exit()
 
+word_map = json.load(open('data/word_map.json'))
 fname = sys.argv[1]
 csvfile = open(fname)
 csv = csv.reader(csvfile, delimiter=',')
@@ -29,16 +32,28 @@ for row in csv:
 	category = row[6]
 	latitude = float(row[4])
 	longitude = float(row[5])
+	district = row[2]
+	street = row[3].split(' ')
+	street = street[-2]
 
 	# label mapping
 	if (not category in label_map):
 		label_map[category] = len(label_map.keys())
 
 	# discretize timestamp
+	if (district in word_map):
+		disNum = word_map[district]
+	else:
+		disNum = -1
+	if (street in word_map):
+		strNum = word_map[street]
+	else:
+		strNum = -1
+
 	date = datetime.datetime.fromtimestamp(timestamp)
 	Labels.append(label_map[category])
-	Features.append([date.year, date.month, date.day, date.hour, date.weekday(),\
-					 latitude, longitude])
+	Features.append([date.year, date.month, date.day, int(date.hour/4), date.weekday(),\
+					 disNum, strNum, latitude, longitude])
 
 csvfile.close()
 Labels = np.array(Labels)
@@ -52,14 +67,14 @@ maxs = Features.max(axis=0)
 oneHot = []
 for row in Features:
 	vec = []
-	for i in range(0, 5):
+	for i in range(0, 7):
 		vec = vec + vectorize(int(mins[i]), int(maxs[i]), int(row[i]))
-	vec.append(((row[5] - mins[5]) / (maxs[5] - mins[5])))
-	vec.append(((row[6] - mins[6]) / (maxs[6] - mins[6])))
+	vec.append(((row[7] - mins[7]) / (maxs[7] - mins[7])))
+	vec.append(((row[8] - mins[8]) / (maxs[8] - mins[8])))
 	oneHot.append(vec)
 
 # Save processed data mat format
-sio.savemat('data/space_time_label_binary.mat', {'Features': oneHot, 'Labels': Labels})
+sio.savemat('data/train_encoded.mat', {'Features': oneHot, 'Labels': Labels})
 
 # save nomralization parameters
 sio.savemat('data/normalization_params', {'mins': mins, 'maxs': maxs})
