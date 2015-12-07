@@ -92,7 +92,7 @@ color_table["PORNOGRAPHY/OBSCENE MAT"] = '999999'
 #        print "Usage: python", sys.argv[0], "inputfile.csv", "crime_label", "year"
 #        sys.exit()
 
-def main(fname,crime_label,y, draw_heatmap=False):
+def main(fname,crime_label,y=-1, draw_heatmap=False):
 
         #fname = sys.argv[1]
         #y = int(sys.argv[3])
@@ -117,17 +117,16 @@ def main(fname,crime_label,y, draw_heatmap=False):
                 lon = float(row[4])
                 lat = float(row[5])
                 category = row[6]
-                if(int(year) == y and category == crime_label):
-                	#index = category_set.index(category)
-                	#print(index)
-                	#xlist[index].append(lat)
-                	#ylist[index].append(lon)
-                        xlist.append(lat)
-                        ylist.append(lon)      
+                if(category == crime_label):
+                        if(y == -1 or year == y):
+                                for i in range(0,15):
+                                        xlist.append(lat)
+                                        ylist.append(lon)    
         #for i in range(0, len(category_set)):
         #	gmap.scatter(xlist[i], ylist[i], color=color_table[category_set[i]], size=40, marker=False)
         if draw_heatmap:
-                gmap.heatmap(xlist, ylist, threshold=3, radius=20)
+                print len(xlist)
+                gmap.heatmap(xlist, ylist, threshold=5, radius=40)
         else:
                 gmap.scatter(xlist, ylist, color=color_table[crime_label], size=40, marker=False)
         crime_convert = crime_label.replace(" ", "_").replace("/", "_")
@@ -139,5 +138,5 @@ def main(fname,crime_label,y, draw_heatmap=False):
         csvfile.close()
         return 0;
 
-#if __name__=='__main__':
-#        sys.exit(main(sys.argv[1], sys.argv[2], int(sys.argv[3])))
+if __name__=='__main__':
+        sys.exit(main(sys.argv[1], sys.argv[2], int(sys.argv[3]), bool(sys.argv[4])))

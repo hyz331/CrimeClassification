@@ -41,8 +41,10 @@ elif mode==2:
 
 # mode 3 takes a csv file(col0=timestamp, col1=lat, col2=lon, col3=weight)
 # and draws a heatmap
+# weight_col is from 3 to 41
 elif mode==3:
 	fname = sys.argv[2]
+	weight_col = int(sys.argv[3])
 	csvfile = open(fname)
 	csv = csv.reader(csvfile, delimiter=',')	
 	xlist = []
@@ -52,14 +54,15 @@ elif mode==3:
 		timestamp = float(row[0])
 		lat = float(row[1])
 		lon = float(row[2])
-		weight = float(row[3])
+		weight = float(row[weight_col])
 		# iterations might need adjustment
-		for i in range(0,weight*1000%1):
+		for i in range(0,int(weight*8)):
 			xlist.append(lat)
 			ylist.append(lon)
 
 	gmap = gmplot.GoogleMapPlotter.from_geocode("San Francisco")
 	# threshold and radius might need adjustment
-	gmap.heatmap(xlist, ylist, threshold=10,radius=10)
+	print len(xlist)
+	gmap.heatmap(xlist, ylist, threshold=5,radius=40,dissipating=True)
 	gmap.draw("output_map.html")
 	csvfile.close()
