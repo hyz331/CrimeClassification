@@ -112,7 +112,7 @@ We followed Kaggle's criteria and used log-likelihood given by the equation belo
 \begin{align*}
 	logloss = -\sum_i^N \sum_j^M y_{ij} log (p_{ij}
 \end{align*}
-For the testing dataset Kaggle provided, we ran our trained classifier and predicted the probability of each entry. The outcomes are formatted and submitted to Kaggle, and we obtained \textbf{2.81} log loss, which beats around 70\% of the participants. We also ran a nearest neighnor classifier with respect to the raw time and location data given to compare the results. Below is a table of different results.
+For the testing dataset Kaggle provided, we ran our trained classifier and predicted the probability of each entry. The outcomes are formatted and submitted to Kaggle, and we obtained \textbf{2.81} log loss, which beats around 70\% of the participants. We also ran a nearest neighbor classifier with respect to the raw time and location data given to compare the results. Below is a table of different results.
 \begin{center}
 	\begin{tabular}{||c c||} 
 		\hline
@@ -127,17 +127,22 @@ For the testing dataset Kaggle provided, we ran our trained classifier and predi
 		Prediction based on prior only & 32.8 \\
 		\hline
 	\end{tabular}
-	{\\fig.2 results comparision}
+	{\\fig.2 results comparison}
 \end{center}
 \item{\textbf{V.3 Data Visualization}\\}
-
+\\
+The heatmap below shows an visualization of test dataset's prediction of the \textbf{Larceny/Theft} crime category:\\
+\\
+\includegraphics[scale=0.5]{LARCENY_THEFT.png}
+\\
 \end{p4}
 
 \begin{p5}{}
 \item{}
-For this project we performed a feature selection based on additional location data using decision trees, and used multivariant logistic regression to predict the probability of different crimes to happen for a given time and location. The intuition is that the spatial-temporal distribution of differetn crimes should follow some pattern, so we should be able to learn some meaningful results from it.\\\\
-One observation is that the performance of our classifier was improved largely by adding 10 selected location district and street names into the feature space. Ideally, given enough dataset and with a sufficiently model, features like district and street should be able to learned automatically from latitude and longitude, as they are essentially some patterns of GPS coordinates. But to make the algorithm more practical and the training process fast enough, we took a different approach. We selected the feature ourselfs, and chose a simple linear model to learn from. This way we can achieve good results without requring large amount data and computations.\\\\
-One thing to improve is that we can try to design more features from time like "morning", "afternoon", "winter", "summer", and features like landmarks, hotels, rich or poor neighboorhood using reverse-geoencoding services and the GPS coordinates we have. This way our feature selection process will have a larger pool to choose from and may further improve the classification accuracy. Another thing that we can do is to try out more complicated models, though it may require more computation resources.
+For this project we performed a feature selection based on additional location data using decision trees, and used multivariate logistic regression to predict the probability of different crimes to happen for a given time and location. The intuition is that the spatial-temporal distribution of different crimes should follow some pattern, so we should be able to learn some meaningful results from it.\\\\
+One observation is that the performance of our classifier was improved largely by adding 10 selected location district and street names into the feature space. Ideally, given enough dataset and with a sufficiently model, features like district and street should be able to learned automatically from latitude and longitude, as they are essentially some patterns of GPS coordinates. But to make the algorithm more practical and the training process fast enough, we took a different approach. We selected the feature ourselves, and chose a simple linear model to learn from. This way we can achieve good results without requiring large amount data and computations.\\\\
+One thing to improve is that we can try to design more features from time like "morning", "afternoon", "winter", "summer", and features like landmarks, hotels, rich or poor neighborhood using reverse-geo-encoding services and the GPS coordinates we have. This way our feature selection process will have a larger pool to choose from and may further improve the classification accuracy. Another thing that we can do is to try out more complicated models, though it may require more computation resources.
+:w
 \end{p5}{}
 
 \begin{p6}{}
