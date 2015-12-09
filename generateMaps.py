@@ -14,9 +14,9 @@ if mode==1:
 	with open("category_list.txt") as f:
 	    category_list = f.read().splitlines()
 	for i in category_list:
-		print(category_list[i])
+		print(i)
 		for year in range(2003, 2015+1):
-			visualize.main("train.csv", category_list[i], year,draw_heatmap=False)
+			visualize.main("train.csv", i, year,draw_heatmap=False)
 
 # mode 2 takes a csv file(col0=timestamp, col1=lat, col2=lon)
 # and draws a scatter plot
@@ -56,13 +56,13 @@ elif mode==3:
 		lon = float(row[2])
 		weight = float(row[weight_col])
 		# iterations might need adjustment
-		for i in range(0,int(weight*8)):
+		for i in range(0,int(weight*10)):
 			xlist.append(lat)
 			ylist.append(lon)
 
 	gmap = gmplot.GoogleMapPlotter.from_geocode("San Francisco")
 	# threshold and radius might need adjustment
 	print len(xlist)
-	gmap.heatmap(xlist, ylist, threshold=5,radius=40,dissipating=True)
+	gmap.heatmap(xlist, ylist, threshold=5,radius=30,dissipating=True)
 	gmap.draw("output_map.html")
 	csvfile.close()

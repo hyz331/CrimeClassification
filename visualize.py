@@ -118,15 +118,15 @@ def main(fname,crime_label,y=-1, draw_heatmap=False):
                 lat = float(row[5])
                 category = row[6]
                 if(category == crime_label):
-                        if(y == -1 or year == y):
-                                for i in range(0,15):
-                                        xlist.append(lat)
-                                        ylist.append(lon)    
+                        if(y == -1 or y == int(year)):
+                                #for i in range(0,1):
+                                xlist.append(lat)
+                                ylist.append(lon)    
         #for i in range(0, len(category_set)):
-        #	gmap.scatter(xlist[i], ylist[i], color=color_table[category_set[i]], size=40, marker=False)
-        if draw_heatmap:
-                print len(xlist)
-                gmap.heatmap(xlist, ylist, threshold=5, radius=40)
+        #	gmap.scatter(xlist[i], ylist[i], color=color_table[category_set[i]], size=40, marker=False)       
+        print len(xlist)
+        if draw_heatmap:               
+                gmap.heatmap(xlist, ylist, threshold=20, radius=40)
         else:
                 gmap.scatter(xlist, ylist, color=color_table[crime_label], size=40, marker=False)
         crime_convert = crime_label.replace(" ", "_").replace("/", "_")
@@ -139,4 +139,4 @@ def main(fname,crime_label,y=-1, draw_heatmap=False):
         return 0;
 
 if __name__=='__main__':
-        sys.exit(main(sys.argv[1], sys.argv[2], int(sys.argv[3]), bool(sys.argv[4])))
+        sys.exit(main(sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]=='True'))
