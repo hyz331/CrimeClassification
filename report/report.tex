@@ -134,7 +134,7 @@ For the testing dataset Kaggle provided, we ran our trained classifier and predi
 \end{center}
 \begin{center}
 	\includegraphics[width=16cm]{kaggle_result.png} 
-	{\\fig.3 Kaggle sumbission}\\
+	{\\fig.3 Kaggle submission}\\
 \end{center}
 \item{\textbf{V.3 Data Visualization}\\}
 \\ 
@@ -163,7 +163,7 @@ fig.7 Heat-map of Test Prediction for \textbf{Assault}:
 \item{}
 For this project we performed a feature selection based on additional location data using decision trees, and used gradient boosting[4] to predict the probability of different crimes to happen for a given time and location. The intuition is that the spatial-temporal distribution of different crimes should follow some pattern, so we should be able to learn some meaningful results from it.\\\\
 One observation is that the performance of our classifier was improved largely by adding selected location features. Ideally, given enough dataset and with a sufficiently model, features like district and street should be able to learned automatically from latitude and longitude, as they are essentially some patterns of GPS coordinates. But to make the algorithm more practical and the training process fast enough, we took a different approach. We selected the feature ourselves, and chose a relatively simple model to learn from. This way we can achieve good results without requiring large amount data and computations.\\\\
-Another observation is that while tuning regularization parameters for logistic regression, we found that cross-validation error alway increses with regularization parameter, meaning our model is too simple. This leads to our choice of gradient boosting[4], and improved our Kaggle ranking by 102.\\\\
+Another observation is that while tuning regularization parameters for logistic regression, we found that cross-validation error alway increases with regularization parameter, meaning our model is too simple. This leads to our choice of gradient boosting[4], and improved our Kaggle ranking by 102.\\\\
 One thing to improve is that we can try to design more features from time like "morning", "afternoon", "winter", "summer", and features like landmarks, hotels, rich or poor neighborhood using reverse-geo-encoding services and the GPS coordinates we have. This way our feature selection process will have a larger pool to choose from and may further improve the classification accuracy. Another thing that we can do is to try out more complicated models, though it may require more computation resources.
 \end{p5}{}
 \begin{p6}{}
