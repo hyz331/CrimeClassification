@@ -46,7 +46,7 @@
 
 \begin{abs}{}
 \item{}
-For this project we performed data mining and visualizations on San Francisco's crime data from 2003 to 2015, in order to find patterns in the space-time distributions of different types of crimes. And we want to predict the probability distribution of each crime occurrence. We first performed feature selection on street names using decision trees, and obtained the most meaningful names in terms of separating different kinds of crimes. Then we used logistic regression, with respect to time, GPS coordinate and the features selected in the previous step, to learn the likelihood function of different crimes. We compared our results with Nearest Neighbor classifier using time and location, and showed that our approach significantly reduced the log loss. Eventually, using our learned results we were able to generate heat maps for different crimes throughout San Francisco.
+For this project we performed data mining and visualizations on San Francisco's crime data from 2003 to 2015, in order to find patterns in the space-time distributions of different types of crimes. And we want to predict the probability distribution of each crime occurrence. We first performed feature selection on street names using decision trees, and obtained the most meaningful names in terms of separating different kinds of crimes. Then we used gradient boosting with log loss, using time, GPS coordinate and the features selected in the previous step, to learn the likelihood function of different crimes. We compared our results with Nearest Neighbor classifier using time and location, and showed that our approach significantly reduced the log loss. Eventually, using our learned results we were able to generate heat maps for different crimes throughout San Francisco.
 \end{abs}
 
 \begin{p1}{}
@@ -61,7 +61,7 @@ The project is implemented in Python, with several third party packages. We used
 \end{p2}
 
 \begin{p3}{}
-\item{\textbf{IV.1 Feature Selection with Random Forrest\\}}
+\item{\textbf{IV.1 Feature Selection with Decision Trees\\}}
 From the dataset we are given the district and street names of all the crime occurrences. Using bag-of-word model[2] we can encode them into binary vectors as part of our feature. But with the size of our dataset, the computation is going to take very long time given the dimension of our feature space. More importantly, the resultant vector of bag-of-words encoding is very sparse -- for a vector of 500+ entries representing bag-of-words encoding of one data point, at most two entries will be 1, because there is only one district and one street name for each crime incident.\\\\
 To address this issue, we want to filter out streets that are not very informative in terms of crime classification. Limiting our bag-of-words model to contain only 10 words for street names, we want to find a subset S, of the set of all streets W, that maximizes the information gain. We have
 \begin{align*}
@@ -69,8 +69,8 @@ To address this issue, we want to filter out streets that are not very informati
 \end{align*}
 This is thus very similar to decision tree learning, except that we want to pick the top 10 features, rather than picking one at each depth. We used an ensemble model, the Extremely Randomized Trees[3] to solve the problem. It basically uses many randomized decision trees, and compute the feature importance based on its frequency of being picked.\\
 
-\item{\textbf{IV.2 Classification Using Logistic Regression\\}}
-Since the resulting dimension of our feature space after feature selection is 101, it is reasonable to believe that the data can be well-separated with linear decision boundaries. So we chose logistic regression as our classification due to its simplicity. We also ran cross validation with different regularization parameters and picked the best parameter.
+\item{\textbf{IV.2 Classification Using Gradient Boosting\\}}
+Since the resulting dimension of our feature space after feature selection is 101, our first thought was that the data can be well-separated with linear decision boundaries. So we chose logistic regression as our classification due to its simplicity. But running cross-validation with respect to regularization parameter C, we found the los loss keep increasing, meaning the predication error is dominated by bias rather than overfitting. So to improve the flexibility of our model, we eventually chose gradient boosting with log loss.
 \end{p3}
 
 \begin{p4}{}
@@ -111,11 +111,13 @@ We followed Kaggle's criteria and used log-likelihood given by the equation belo
 \begin{align*}
 	logloss = -\sum_i^N \sum_j^M y_{ij} log (p_{ij})
 \end{align*}
-For the testing dataset Kaggle provided, we ran our trained classifier and predicted the probability of each entry. The outcomes are formatted and submitted to Kaggle, and we obtained \textbf{2.81} log loss, which beats around 70\% of the participants. We also ran a nearest neighbor classifier with respect to the raw time and location data given to compare the results. Below is a table of different results.
+For the testing dataset Kaggle provided, we ran our trained classifier and predicted the probability of each entry. The outcomes are formatted and submitted to Kaggle, and we obtained \textbf{2.81} log loss, which is ranked \textbf{top 22\%} over all participants. We also ran a nearest neighbor classifier with respect to the raw time and location data given to compare the results. Below is a table of different results.
 \begin{center}
 	\begin{tabular}{||c c||} 
 		\hline
 	   	Algorithm & Log Loss \\
+		\hline
+	   	Gradient boosting with feature selection & 2.50\\
 		\hline
 		Logistic regression with feature selection & 2.56 \\
 		\hline
